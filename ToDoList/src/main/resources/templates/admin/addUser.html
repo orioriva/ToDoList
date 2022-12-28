@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- 共通 <head> 読込 -->
+<head th:replace="fragment/head :: head_fragment(
+title = #{title.addUser}, scripts = ~{::script}, links = ~{::link})">
+	<!-- 個別CSS、JSを引数に指定 -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/addUser.css}"/>
+	<script type="text/javascript" th:src="@{/js/inputUser.js}"></script>
+</head>
+<body>
+
+<!-- 共通 <header> 読込 -->
+<div th:replace="fragment/header :: header_fragment(text = #{title.addUser})"></div>
+
+<!-- 登録情報入力 -->
+<form id="input-form" class="d-flex justify-content-center row" th:object="${addUserForm}">
+	<table class="table table-striped table-bordered table-hover col-7">
+		<!-- ユーザー名 -->
+		<tr>
+			<th class="col-2" th:text="#{userName}"></th>
+			<td class="col-5">
+				<input type="text" class="form-control" th:field="*{name}">
+			</td>
+		</tr>
+		<!-- パスワード -->
+		<tr>
+			<th th:text="#{password}"></th>
+			<td>
+				<!-- パスワード入力 -->
+				<label th:text="#{password}"></label>
+				<input class="form-control mb-2" type="password" th:field="*{password}">
+				<label th:text="#{passwordConfirm}"></label>
+				<input class="form-control mb-2" type="password" th:field="*{passwordConfirm}">
+			</td>
+		</tr>
+		<!-- 管理者権限 -->
+		<tr>
+			<th th:text="#{admin.user} + #{authority}"></th>
+			<td>
+				<div class="form-check ml-2">
+					<input type="checkbox" class="form-check-input" id="adminCheck" th:field="*{admin}">
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>
+
+<!-- 登録とキャンセルボタン -->
+<div th:replace="fragment/inputWork :: inputWorkBtns_fragment(submitText = #{register.btn})"></div>
+
+</body>
+</html>

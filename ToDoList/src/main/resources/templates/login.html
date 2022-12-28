@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- 共通 <head> 読込 -->
+<head th:replace="fragment/head :: head_fragment(
+title = #{title.login}, scripts = ~{::script}, links = ~{::link})">
+	<!-- 個別CSS、JSを引数に指定 -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+	<script type="text/javascript" th:src="@{/js/login.js}"></script>
+</head>
+<body>
+<!-- 共通 <header> 読込 -->
+<div th:replace="fragment/header :: header_fragment(text = #{header.login})"></div>
+
+<!-- 個別画面 -->
+<div class="d-flex justify-content-center">
+	<form id="input-form" th:action="@{/login}" method="post" class="form-input" th:object="${loginForm}">
+		<!-- ユーザー名 -->
+		<div class="form-group form-inline">
+			<label class="mr-3" for="userName" th:text="#{userName}"></label>
+			<input type="text" id="userName" th:field="*{userName}" class="form-control">
+		</div>
+		<!-- パスワード -->
+		<div class="form-group form-inline">
+			<label class="mr-3" for="password" th:text="#{password}"></label>
+			<input type="password" id="password" th:field="*{password}" class="form-control">
+		</div>
+		<!-- 送信ボタン -->
+		<div class="text-center">
+			<button id="btn-send" type="button" class="btn btn-primary">
+				[[#{submit.btn}]]
+				<i class="ml-1 fas fa-sign-in-alt"></i>
+			</button>
+		</div>
+	</form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<header xmlns:th="http://www.thymeleaf.org" th:fragment="header_fragment(text)">
+	<div class="bg-light border-bottom mb-3 container-fluid navbar">
+		<!-- 見出し -->
+		<div class="nav-item">
+			<h2 th:text="${text}"></h2>
+		</div>
+		<div th:if="${sessionData != null}" class="nav-item d-flex flex-row align-items-center" th:object="${sessionData.loginUser}">
+			<div th:if="*{admin}">
+				<!-- 管理者専用表示 -->
+				<th:block th:if="${sessionData.returnPage} == '/admin/userList' or ${sessionData.returnPage} == '/admin/searchUserResult'">
+					<a class="btn btn-info mr-3" href="/workList" role="button" th:text="#{link.commonUserPage}"></a>
+				</th:block>
+				<th:block th:unless="${sessionData.returnPage} == '/admin/userList' or ${sessionData.returnPage} == '/admin/searchUserResult'">
+					<a class="btn btn-danger mr-3" href="/admin/userList" role="button" th:text="#{link.adminUserPage}"></a>
+				</th:block>
+				<!--
+				<th:block th:switch="${sessionData.returnPage}">
+					<a th:case="'/admin/userList'" class="btn btn-info mr-3" href="/workList" role="button" th:text="#{link.commonUserPage}"></a>
+					<a th:case="*" class="btn btn-danger mr-3" href="/admin/userList" role="button" th:text="#{link.adminUserPage}"></a>
+				</th:block>
+				 -->
+			</div>
+			<!-- ユーザー操作ドロップダウンリスト -->
+			<div class="dropdown">
+				<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fas fa-user-circle fa-lg mr-2"></i>
+					[[#{welcome.front} + ' ' + *{name} + ' ' + #{welcome.back}]]
+				</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenu">
+					<!-- ユーザー情報編集 -->
+					<form th:action="@{/updateUser}" method="post">
+						<button class="dropdown-item" type="submit" th:text="#{title.updateUser}"></button>
+					</form>
+					<!-- ログアウト -->
+					<form th:action="@{/logout}" method="post">
+						<button class="dropdown-item" type="submit">
+							[[#{logout.btn}]]
+							<i class="ml-2 fas fa-sign-out-alt"></i>
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- エラーメッセージ表示  -->
+	<div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}"
+		th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"
+		class="text-center font-weight-bold text-danger">
+		login Error Message
+	</div>
+	<div id="errorMsg" class="text-center font-weight-bold mb-3">
+	</div>
+	<div th:if="${AnyMsg != null}">
+		<div class="text-danger" th:text="${AnyMsg}"></div>
+	</div>
+</header>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- 共通 <head> 読込 -->
+<head th:replace="fragment/head :: head_fragment(
+title = #{title.searchResult}, scripts = ~{::script}, links = ~{::link})">
+	<!-- 個別CSS、JSを引数に指定 -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/blank.css}"/>
+	<script type="text/javascript" th:src="@{/js/workList.js}"></script>
+</head>
+<body>
+<!-- 共通 <header> 読込 -->
+<div th:replace="fragment/header :: header_fragment(text = #{title.searchResult})"></div>
+
+<!-- 上部ナビ部分 -->
+<div th:replace="fragment/viewWorkList :: workListNavbar_fragment"></div>
+
+<!-- 作業一覧テーブル -->
+<table th:replace="fragment/viewWorkList :: workListTable_fragment"></table>
+
+<!-- ページングボタン -->
+<form th:replace="fragment/viewWorkList :: workListPageList_fragment"></form>
+
+<!-- 戻るボタン -->
+<div class="float-right mr-3">
+	<a class="btn btn-outline-secondary" href="/workList" role="button" th:text="#{return.btn}"></a>
+</div>
+
+</body>
+</html>

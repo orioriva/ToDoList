@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- 共通 <head> 読込 -->
+<head th:replace="fragment/head :: head_fragment(
+title = #{title.error}, scripts = ~{::script}, links = ~{::link})">
+	<!-- 個別CSS、JSを引数に指定 -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/blank.css}"/>
+	<script type="text/javascript" th:src="@{/js/blank.js}"></script>
+</head>
+<body>
+<!-- 共通 <header> 読込 -->
+<div th:replace="fragment/header :: header_fragment(text = #{title.error})"></div>
+
+<!-- 画面別処理 -->
+<div class="text-center">
+	<div class="text-denter text-danger font-weight-bold mb-3" th:text="#{sorryError}"></div>
+	<form th:action="@{/logout}" method="post">
+		<button type="submit" class="btn btn-secondary">
+			[[#{logout.btn}]]
+			<i class="ml-2 fas fa-sign-out-alt"></i>
+		</button>
+	</form>
+</div>
+
+<!--
+<h1 th:text="${status} + ' ' + ${error}"></h1>
+<p th:text="${message}"></p>
+<a href="javascript:history.back();" th:text="#{back.prev}"></a>
+ -->
+</body>
+</html>

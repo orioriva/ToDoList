@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapperとxmlのマッピング -->
+<mapper namespace="todo.project.spring.mapper.WorkMapper">
+
+<!-- マッピング定義(worksテーブル -> MWorkクラス) -->
+<resultMap type="todo.project.spring.model.MWork" id="mwork">
+	<id column="id" property="id" />
+	<result column="user_id" property="userId" />
+	<result column="work_name" property="workName" />
+	<result column="manager" property="manager" />
+	<result column="registration_date" property="registrationDate" />
+	<result column="deadline" property="deadline" />
+	<result column="completion_date" property="completionDate" />
+</resultMap>
+
+<!-- ユーザーIDと紐づいた作業数をカウント -->
+<select id="countWorkAll" resultType="int">
+SELECT
+	count(
+		*
+	)
+FROM
+	works
+WHERE
+	#{userId} = user_id AND
+	delete_flg = false
+</select>
+
+<!-- 検索値を含む作業をカウント -->
+<select id="countWorkSearch" resultType="int">
+SELECT
+	count(
+		*
+	)
+FROM
+	works
+WHERE
+	#{userId} = user_id AND
+	delete_flg = false AND
+	(
+		work_name LIKE CONCAT('%', #{order}, '%') OR
+		manager LIKE CONCAT('%', #{order}, '%')
+	)
+</select>
+
+<!-- ユーザー名と紐づいた作業一覧取得 -->
+<select id="findWorkAll" resultMap="mwork">
+	select
+		id,
+		work_name,
+		manager,
+		registration_date,
+		deadline,
+		completion_date
+	from
+		works
+	where
+		#{userId} = user_id AND
+		delete_flg = false
+	order by
+		deadline asc
+</select>
+
+<!-- ユーザー名と紐づいた作業一覧取得（LIMIT） -->
+<select id="findWorkLimit" resultMap="mwork">
+	SELECT
+		id,
+		work_name,
+		manager,
+		registration_date,
+		deadline,
+		completion_date
+	FROM
+		works
+	WHERE
+		#{userId} = user_id AND
+		delete_flg = false
+	ORDER BY
+		deadline asc
+	LIMIT
+		#{index},
+		#{limit}
+</select>
+
+<!-- 検索値を含む作業一覧を取得 -->
+<select id="searchWorkAll" resultMap="mwork">
+	select
+		id,
+		work_name,
+		manager,
+		registration_date,
+		deadline,
+		completion_date
+	from
+		works
+	where
+		#{userId} = user_id AND
+		delete_flg = false AND
+		(
+			work_name LIKE CONCAT('%', #{order}, '%') OR
+			manager LIKE CONCAT('%', #{order}, '%')
+		)
+	order by
+		deadline asc
+</select>
+
+<!-- 検索値を含む作業を取得（LIMIT） -->
+<select id="searchWorkLimit" resultMap="mwork">
+	select
+		id,
+		work_name,
+		manager,
+		registration_date,
+		deadline,
+		completion_date
+	from
+		works
+	where
+		#{userId} = user_id AND
+		delete_flg = false AND
+		(
+			work_name LIKE CONCAT('%', #{order}, '%') OR
+			manager LIKE CONCAT('%', #{order}, '%')
+		)
+	order by
+		deadline asc
+	LIMIT
+		#{index},
+		#{limit}
+</select>
+
+<!-- 作業１件登録  -->
+<insert id="addWorkOne">
+	INSERT INTO works(
+		user_id,
+		work_name,
+		manager,
+		registration_date,
+		deadline,
+		completion_date
+	) VALUES(
+		#{userId},
+		#{workName},
+		#{manager},
+		#{registrationDate},
+		#{deadline},
+		#{completionDate}
+	)
+</insert>
+
+<!-- 作業内容更新 -->
+<update id="updateWorkOne">
+UPDATE
+	works
+SET
+	work_name = #{workName},
+	manager = #{manager},
+	deadline = #{deadline},
+	completion_date = #{completionDate}
+WHERE
+	id = #{id} AND
+	delete_flg = false
+</update>
+
+<!-- 作業IDから作業内容１件取得 -->
+<select id="findWorkOne" resultMap="mwork">
+SELECT
+	id,
+	work_name,
+	manager,
+	registration_date,
+	deadline,
+	completion_date
+FROM
+	works
+WHERE
+	id = #{id} AND
+	delete_flg = false
+</select>
+
+<!-- 作業１件を完了済みにする -->
+<update id="completeWorkOne">
+UPDATE
+	works
+SET
+	completion_date = NOW()
+WHERE
+	id = #{id} AND
+	completion_date IS NULL AND
+	delete_flg = false
+</update>
+
+<!-- 作業１件の削除フラグをONにする -->
+<update id="deleteWorkOne">
+UPDATE
+	works
+SET
+	delete_flg = true
+WHERE
+	id = #{id} AND
+	delete_flg = false
+</update>
+
+<!-- 作業１件の削除フラグ取得 -->
+<select id="isDeleted" resultType="boolean">
+SELECT
+	delete_flg
+FROM
+	works
+WHERE
+	id = #{id}
+</select>
+
+</mapper>

@@ -1,0 +1,18 @@
+<head xmlns:th="http://www.thymeleaf.org" th:fragment="head_fragment(title, scripts, links)">
+	<meta charset="UTF-8">
+	<title th:text="${title}"></title>
+
+	<!-- 共通 CSS 読込 -->
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+	<link rel="stylesheet" th:href="@{/css/base.css}">
+	<!-- 個別 CSS 読込 -->
+	<th:block th:replace="${links}" />
+
+	<!-- 共通 JS 読込 -->
+	<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+	<script type="text/javascript" th:src="@{/js/base.js}" th:inline="javascript" defer></script>
+	<!-- 個別 JS 読込 -->
+	<th:block th:replace="${scripts}" />
+</head>

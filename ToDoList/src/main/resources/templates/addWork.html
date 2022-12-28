@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- 共通 <head> 読込 -->
+<head th:replace="fragment/head :: head_fragment(
+title = #{title.addWork}, scripts = ~{::script}, links = ~{::link})">
+	<!-- 個別CSS、JSを引数に指定 -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/blank.css}"/>
+	<script type="text/javascript" th:src="@{/js/inputWork.js}"></script>
+</head>
+<body>
+<!-- 共通 <header> 読込 -->
+<div th:replace="fragment/header :: header_fragment(text = #{title.addWork})"></div>
+
+<!-- 作業登録・更新の共通部分読込 -->
+<div th:replace="fragment/inputWork :: inputWorkTable_fragment"></div>
+
+<!-- 登録とキャンセルボタン -->
+<div th:replace="fragment/inputWork :: inputWorkBtns_fragment(submitText = #{register.btn})"></div>
+
+</body>
+</html>

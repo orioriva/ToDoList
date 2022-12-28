@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapperとxmlのマッピング -->
+<mapper namespace="todo.project.spring.mapper.UserMapper">
+
+<!-- マッピング定義(usersテーブル -> MUserクラス) -->
+<resultMap type="todo.project.spring.model.MUser" id="muser">
+	<id column="id" property="id" />
+	<result column="name" property="name" />
+	<result column="password" property="password" />
+	<result column="admin" property="admin"/>
+</resultMap>
+
+<!-- 名前とパスワードからユーザー１名取得 -->
+<select id="findUserOne" resultMap="muser">
+	select
+		id,
+		name,
+		admin
+	from
+		`users`
+	where
+		#{name} = name AND
+		#{password} = password
+</select>
+
+<!-- ユーザー名からユーザー１名取得 -->
+<select id="findUserOneName" resultType="muser">
+	select
+		*
+	from
+		users
+	where
+		#{name} = name;
+</select>
+
+<!-- IDからユーザー１名取得 -->
+<select id="findUserOneId" resultMap="muser">
+	select
+		id,
+		name,
+		admin
+	from
+		`users`
+	where
+		#{id} = id
+</select>
+
+<!-- ユーザー一覧取得 -->
+<select id="findUserAll" resultMap="muser">
+	select
+		id,
+		name,
+		admin
+	from
+		`users`
+</select>
+
+<!-- 検索値を含むユーザー一覧を取得 -->
+<select id="searchUserAll" resultMap="muser">
+	select
+		id,
+		name,
+		admin
+	from
+		users
+	where
+		name LIKE CONCAT('%', #{order}, '%')
+</select>
+
+<!-- IDと合致するユーザー名を取得 -->
+<select id="getUserNameFromId" resultType="String">
+	select
+		name
+	from
+		`users`
+	where
+		id = #{id}
+</select>
+
+<!-- ユーザー1件の全ての情報を取得 -->
+<select id="getUserOneAllStatus" resultMap="muser">
+	select
+		*
+	from
+		users
+	where
+		id = #{id}
+</select>
+
+<!-- ユーザー名と一致するユーザーの数を取得 -->
+<select id="countUserName" resultType="int">
+select
+	count(
+		*
+	)
+from
+	`users`
+where
+	name = #{userName}
+</select>
+
+<!-- ユーザー新規登録 -->
+<insert id="addUser">
+	INSERT INTO users(
+		name,
+		password,
+		admin
+	) VALUES(
+		#{name},
+		#{password},
+		#{admin}
+	)
+</insert>
+
+<!-- ユーザー削除 -->
+<delete id="deleteUser">
+	DELETE FROM
+		users
+	WHERE
+		id = #{id}
+</delete>
+
+<!-- ユーザーの登録内容更新 -->
+<update id="updateUser">
+	UPDATE
+		users
+	SET
+		name = #{name},
+		password = #{password},
+		admin = #{admin}
+	WHERE
+		id = #{id}
+</update>
+
+</mapper>

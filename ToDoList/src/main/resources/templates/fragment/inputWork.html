@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>作業入力情報断片置き場</title>
+</head>
+<body>
+
+<!-- 作業情報入力欄テーブル -->
+<form th:fragment="inputWorkTable_fragment" th:object="${inputWorkForm}" id="input-form" class="d-flex justify-content-center row">
+	<table class="table table-striped table-bordered col-7">
+		<!-- 項目名 -->
+		<tr>
+			<th class="text-center col-2 align-middle" th:text="#{workName}"></th>
+			<td>
+				<input class="form-control" type="text" th:field="*{workName}">
+			</td>
+		</tr>
+		<!-- 担当者 -->
+		<tr>
+			<th class="text-center align-middle" th:text="#{manager}"></th>
+			<td>
+				<select class="form-control col-5" th:field="*{managerName}">
+					<option th:value="NULL" th:text="#{pleaseSelect}"></option>
+					<option th:each="item:${userList}" th:value="${item.name}" th:text="${item.name}"></option>
+				</select>
+			</td>
+		</tr>
+		<!-- 期限 -->
+		<tr>
+			<th class="text-center align-middle" th:text="#{deadline} "></th>
+			<td>
+				<input class="form-control col-4" type="date" th:field="*{deadline}">
+			</td>
+		</tr>
+		<!-- 完了 -->
+		<tr>
+			<th class="text-center align-middle" th:text="#{complete}"></th>
+			<td>
+				<input class="form-check-input col-2" type="checkbox" th:field="*{complete}">
+			</td>
+		</tr>
+	</table>
+</form>
+
+<!-- 送信とキャンセルボタン -->
+<div th:fragment="inputWorkBtns_fragment(submitText)" class="d-flex justify-content-center">
+	<!-- 戻り先ページ -->
+	<input id="returnPage" name="returnPage" type="hidden" th:value="${sessionData.returnPage}">
+
+	<th:block th:switch="${submitText}">
+		<!-- 登録の場合 -->
+		<input th:case="#{register.btn}" id="btn-register" class="btn mr-3 btn-primary" type="button" th:value="${submitText}">
+		<!-- 更新の場合 -->
+		<input th:case="#{update}" id="btn-update" class="btn mr-3 btn-primary" type="button" th:value="${submitText}">
+		<!-- 削除の場合 -->
+		<input th:case="#{delete}" id="btn-delete" class="btn mr-3 btn-danger" type="button" th:value="${submitText}">
+	</th:block>
+	<a class="btn btn-secondary" href="javascript:history.back();" role="button" th:text="#{cancel.btn}"></a>
+</div>
+
+</body>
+</html>
